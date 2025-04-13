@@ -86,24 +86,27 @@ class PixelPlanet {
                     const nx = Math.cos(angle) * distance / radius;
                     const ny = Math.sin(angle) * distance / radius;
                     
-                    // Generate base height
+                    // Generate base height with more variation
                     const baseHeight = 1 - (distance / radius);
                     
-                    // Generate multiple layers of noise
-                    const noise1 = noise2D(nx * noiseScale, ny * noiseScale);
-                    const noise2 = noise2D(nx * noiseScale * 2, ny * noiseScale * 2) * 0.5;
-                    const noise3 = noise2D(nx * noiseScale * 4, ny * noiseScale * 4) * 0.25;
-                    const noise4 = noise2D(nx * noiseScale * 8, ny * noiseScale * 8) * 0.125;
-                    const noise5 = noise2D(nx * noiseScale * 16, ny * noiseScale * 16) * 0.0625;
+                    // Generate multiple layers of noise with different frequencies
+                    const noise1 = noise2D(nx * noiseScale * 0.5, ny * noiseScale * 0.5);
+                    const noise2 = noise2D(nx * noiseScale, ny * noiseScale) * 0.5;
+                    const noise3 = noise2D(nx * noiseScale * 2, ny * noiseScale * 2) * 0.25;
+                    const noise4 = noise2D(nx * noiseScale * 4, ny * noiseScale * 4) * 0.125;
+                    const noise5 = noise2D(nx * noiseScale * 8, ny * noiseScale * 8) * 0.0625;
                     
-                    // Combine noise layers
+                    // Add a low-frequency noise for continent shaping
+                    const continentNoise = noise2D(nx * noiseScale * 0.25, ny * noiseScale * 0.25) * 0.3;
+                    
+                    // Combine noise layers with continent shaping
                     const combinedNoise = (noise1 + noise2 + noise3 + noise4 + noise5) / 1.9375;
                     
                     // Add turbulence for fine detail
-                    const turbulence = noise2D(nx * noiseScale * 32, ny * noiseScale * 32) * 0.05;
+                    const turbulence = noise2D(nx * noiseScale * 16, ny * noiseScale * 16) * 0.05;
                     
-                    // Calculate final height with biome-specific adjustments
-                    let height = baseHeight + (combinedNoise + turbulence) * 0.4;
+                    // Calculate final height with more variation
+                    let height = baseHeight + (combinedNoise + turbulence + continentNoise) * 0.5;
                     
                     // Apply biome-specific noise
                     for (const [type, properties] of Object.entries(this.landTypes)) {
