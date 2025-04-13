@@ -1,4 +1,4 @@
-.PHONY: install dev build clean deploy preview
+.PHONY: install dev build clean deploy preview screenshot
 
 # Default target
 all: install
@@ -52,4 +52,8 @@ help:
 	@echo "  make test      - Run tests"
 	@echo "  make format    - Format code"
 	@echo "  make lint      - Lint code"
-	@echo "  make help      - Show this help message" 
+	@echo "  make help      - Show this help message"
+
+# Take a screenshot
+screenshot:
+	node capture.js 

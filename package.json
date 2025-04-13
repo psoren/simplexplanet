@@ -8,7 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist" 
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "simplex-noise": "^4.0.1",
@@ -16,6 +16,7 @@
   },
   "devDependencies": {
     "gh-pages": "^6.3.0",
+    "playwright": "^1.51.1",
     "vite": "^5.1.0"
   },
   "homepage": "https://github.com/psoren/simplexplanet"
