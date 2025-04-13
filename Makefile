@@ -1,4 +1,4 @@
-.PHONY: install dev build clean
+.PHONY: install dev build clean deploy preview
 
 # Default target
 all: install
@@ -14,6 +14,14 @@ dev:
 # Build for production
 build:
 	npm run build
+
+# Preview production build
+preview:
+	npm run preview
+
+# Deploy to GitHub Pages
+deploy: build
+	npm run deploy
 
 # Clean build artifacts
 clean:
@@ -38,6 +46,8 @@ help:
 	@echo "  make install    - Install dependencies"
 	@echo "  make dev       - Start development server"
 	@echo "  make build     - Build for production"
+	@echo "  make preview   - Preview production build"
+	@echo "  make deploy    - Deploy to GitHub Pages"
 	@echo "  make clean     - Clean build artifacts"
 	@echo "  make test      - Run tests"
 	@echo "  make format    - Format code"
