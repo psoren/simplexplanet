@@ -6,13 +6,16 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "gh-pages -d dist" 
   },
   "dependencies": {
-    "three": "^0.161.0",
-    "simplex-noise": "^4.0.1"
+    "simplex-noise": "^4.0.1",
+    "three": "^0.161.0"
   },
   "devDependencies": {
+    "gh-pages": "^6.3.0",
     "vite": "^5.1.0"
-  }
-} 
+  },
+  "homepage": "https://github.com/psoren/simplexplanet"
+}
