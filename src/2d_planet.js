@@ -8,15 +8,60 @@ class PixelPlanet {
         this.canvas.width = size;
         this.canvas.height = size;
         
-        // Color palette matching the reference image
-        this.colors = {
-            deepWater: '#1a1a3a',
-            shallowWater: '#2a2a5a',
-            beach: '#e6b873',
-            grass: '#4d8c57',
-            mountain: '#8c6d4d',
-            snow: '#f5f5f5'
+        // Define land types with their characteristics
+        this.landTypes = {
+            deepOcean: {
+                color: '#1a1a3a',
+                heightRange: [0, 0.3],
+                noiseScale: 0.8,
+                noiseWeight: 0.3
+            },
+            shallowOcean: {
+                color: '#2a2a5a',
+                heightRange: [0.3, 0.5],
+                noiseScale: 0.6,
+                noiseWeight: 0.4
+            },
+            beach: {
+                color: '#e6b873',
+                heightRange: [0.5, 0.6],
+                noiseScale: 0.4,
+                noiseWeight: 0.5
+            },
+            plains: {
+                color: '#4d8c57',
+                heightRange: [0.6, 0.7],
+                noiseScale: 0.3,
+                noiseWeight: 0.6
+            },
+            hills: {
+                color: '#6d9c67',
+                heightRange: [0.7, 0.8],
+                noiseScale: 0.2,
+                noiseWeight: 0.7
+            },
+            mountains: {
+                color: '#8c6d4d',
+                heightRange: [0.8, 0.9],
+                noiseScale: 0.15,
+                noiseWeight: 0.8
+            },
+            snowPeaks: {
+                color: '#f5f5f5',
+                heightRange: [0.9, 1.0],
+                noiseScale: 0.1,
+                noiseWeight: 0.9
+            }
         };
+    }
+
+    getLandType(height) {
+        for (const [type, properties] of Object.entries(this.landTypes)) {
+            if (height >= properties.heightRange[0] && height < properties.heightRange[1]) {
+                return { type, ...properties };
+            }
+        }
+        return null;
     }
 
     generate(noiseScale = 0.5) {
@@ -41,40 +86,46 @@ class PixelPlanet {
                     const nx = Math.cos(angle) * distance / radius;
                     const ny = Math.sin(angle) * distance / radius;
                     
-                    // Generate multiple layers of noise with different frequencies
+                    // Generate base height
+                    const baseHeight = 1 - (distance / radius);
+                    
+                    // Generate multiple layers of noise
                     const noise1 = noise2D(nx * noiseScale, ny * noiseScale);
                     const noise2 = noise2D(nx * noiseScale * 2, ny * noiseScale * 2) * 0.5;
                     const noise3 = noise2D(nx * noiseScale * 4, ny * noiseScale * 4) * 0.25;
                     const noise4 = noise2D(nx * noiseScale * 8, ny * noiseScale * 8) * 0.125;
                     const noise5 = noise2D(nx * noiseScale * 16, ny * noiseScale * 16) * 0.0625;
                     
-                    // Combine noise layers with different weights
-                    const noise = (noise1 + noise2 + noise3 + noise4 + noise5) / 1.9375;
+                    // Combine noise layers
+                    const combinedNoise = (noise1 + noise2 + noise3 + noise4 + noise5) / 1.9375;
                     
-                    // Add some turbulence for more detail
+                    // Add turbulence for fine detail
                     const turbulence = noise2D(nx * noiseScale * 32, ny * noiseScale * 32) * 0.05;
                     
-                    const height = 1 + (noise + turbulence) * 0.4;
+                    // Calculate final height with biome-specific adjustments
+                    let height = baseHeight + (combinedNoise + turbulence) * 0.4;
                     
-                    // Set color based on height with more granular thresholds
-                    let color;
-                    if (height < 0.92) {
-                        color = this.colors.deepWater;
-                    } else if (height < 0.96) {
-                        color = this.colors.shallowWater;
-                    } else if (height < 1.02) {
-                        color = this.colors.beach;
-                    } else if (height < 1.12) {
-                        color = this.colors.grass;
-                    } else if (height < 1.22) {
-                        color = this.colors.mountain;
-                    } else {
-                        color = this.colors.snow;
+                    // Apply biome-specific noise
+                    for (const [type, properties] of Object.entries(this.landTypes)) {
+                        if (height >= properties.heightRange[0] && height < properties.heightRange[1]) {
+                            const biomeNoise = noise2D(
+                                nx * noiseScale * properties.noiseScale,
+                                ny * noiseScale * properties.noiseScale
+                            ) * properties.noiseWeight * 0.2;
+                            height += biomeNoise;
+                            break;
+                        }
                     }
                     
-                    // Draw pixel
-                    this.ctx.fillStyle = color;
-                    this.ctx.fillRect(x, y, 1, 1);
+                    // Normalize height
+                    height = Math.max(0, Math.min(1, height));
+                    
+                    // Get land type and color
+                    const landType = this.getLandType(height);
+                    if (landType) {
+                        this.ctx.fillStyle = landType.color;
+                        this.ctx.fillRect(x, y, 1, 1);
+                    }
                 }
             }
         }
