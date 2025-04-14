@@ -9,37 +9,289 @@ class PixelPlanet {
         this.canvas.height = size;
         this.initializeNoise();
         
-        // Define land types with their characteristics
-        this.landTypes = {
-            deepOcean: {
-                color: '#1a1a3a',    // Dark blue
-                heightRange: [0, 0.4] // Increased from [0, 0.3]
+        // Define planet types with their color palettes
+        this.planetTypes = {
+            'terra-nova': {
+                name: 'Terra Nova',
+                landTypes: {
+                    deepOcean: {
+                        color: '#1a1a3a',    // Dark blue
+                        heightRange: [0, 0.4]
+                    },
+                    shallowOcean: {
+                        color: '#2a2a5a',    // Medium blue
+                        heightRange: [0.4, 0.5]
+                    },
+                    beach: {
+                        color: '#e6b873',    // Sandy color
+                        heightRange: [0.5, 0.55]
+                    },
+                    plains: {
+                        color: '#4d8c57',    // Green
+                        heightRange: [0.55, 0.65]
+                    },
+                    hills: {
+                        color: '#6d9c67',    // Darker green
+                        heightRange: [0.65, 0.8]
+                    },
+                    mountains: {
+                        color: '#8c6d4d',    // Brown
+                        heightRange: [0.8, 0.95]
+                    },
+                    snowPeaks: {
+                        color: '#f5f5f5',    // White
+                        heightRange: [0.95, 1.0]
+                    }
+                }
             },
-            shallowOcean: {
-                color: '#2a2a5a',    // Medium blue
-                heightRange: [0.4, 0.5] // Increased from [0.3, 0.4]
+            'glacius': {
+                name: 'Glacius',
+                landTypes: {
+                    deepOcean: {
+                        color: '#1a3a5a',    // Deep blue
+                        heightRange: [0, 0.4]
+                    },
+                    shallowOcean: {
+                        color: '#3a5a7a',    // Light blue
+                        heightRange: [0.4, 0.5]
+                    },
+                    beach: {
+                        color: '#c8e0f0',    // Ice
+                        heightRange: [0.5, 0.55]
+                    },
+                    plains: {
+                        color: '#a0c0d0',    // Light ice
+                        heightRange: [0.55, 0.65]
+                    },
+                    hills: {
+                        color: '#8090a0',    // Dark ice
+                        heightRange: [0.65, 0.8]
+                    },
+                    mountains: {
+                        color: '#607080',    // Darker ice
+                        heightRange: [0.8, 0.95]
+                    },
+                    snowPeaks: {
+                        color: '#ffffff',    // White
+                        heightRange: [0.95, 1.0]
+                    }
+                }
             },
-            beach: {
-                color: '#e6b873',    // Sandy color
-                heightRange: [0.5, 0.55] // Reduced from [0.4, 0.5]
+            'jungle-prime': {
+                name: 'Jungle Prime',
+                landTypes: {
+                    deepOcean: {
+                        color: '#1a3a2a',    // Deep green-blue
+                        heightRange: [0, 0.4]
+                    },
+                    shallowOcean: {
+                        color: '#2a5a3a',    // Light green-blue
+                        heightRange: [0.4, 0.5]
+                    },
+                    beach: {
+                        color: '#c8b873',    // Sandy color
+                        heightRange: [0.5, 0.55]
+                    },
+                    plains: {
+                        color: '#2d8c37',    // Dark green
+                        heightRange: [0.55, 0.65]
+                    },
+                    hills: {
+                        color: '#3d9c47',    // Medium green
+                        heightRange: [0.65, 0.8]
+                    },
+                    mountains: {
+                        color: '#4d6d3d',    // Darker green
+                        heightRange: [0.8, 0.95]
+                    },
+                    snowPeaks: {
+                        color: '#a0c0a0',    // Light green
+                        heightRange: [0.95, 1.0]
+                    }
+                }
             },
-            plains: {
-                color: '#4d8c57',    // Green
-                heightRange: [0.55, 0.65] // Reduced from [0.5, 0.6]
+            'cliffside': {
+                name: 'Cliffside',
+                landTypes: {
+                    deepOcean: {
+                        color: '#1a1a2a',    // Very deep blue
+                        heightRange: [0, 0.4]
+                    },
+                    shallowOcean: {
+                        color: '#2a2a3a',    // Deep blue
+                        heightRange: [0.4, 0.5]
+                    },
+                    beach: {
+                        color: '#967853',    // Rocky color
+                        heightRange: [0.5, 0.55]
+                    },
+                    plains: {
+                        color: '#645a40',    // Brown
+                        heightRange: [0.55, 0.65]
+                    },
+                    hills: {
+                        color: '#4a4030',    // Dark brown
+                        heightRange: [0.65, 0.8]
+                    },
+                    mountains: {
+                        color: '#302820',    // Darker brown
+                        heightRange: [0.8, 0.95]
+                    },
+                    snowPeaks: {
+                        color: '#c8c8c8',    // Light gray
+                        heightRange: [0.95, 1.0]
+                    }
+                }
             },
-            hills: {
-                color: '#6d9c67',    // Darker green
-                heightRange: [0.65, 0.8] // Reduced from [0.6, 0.75]
+            'desertia': {
+                name: 'Desertia',
+                landTypes: {
+                    deepOcean: {
+                        color: '#1a1a3a',    // Deep blue
+                        heightRange: [0, 0.4]
+                    },
+                    shallowOcean: {
+                        color: '#2a2a5a',    // Medium blue
+                        heightRange: [0.4, 0.5]
+                    },
+                    beach: {
+                        color: '#c8a873',    // Sand
+                        heightRange: [0.5, 0.55]
+                    },
+                    plains: {
+                        color: '#967853',    // Desert
+                        heightRange: [0.55, 0.65]
+                    },
+                    hills: {
+                        color: '#785a30',    // Rocky desert
+                        heightRange: [0.65, 0.8]
+                    },
+                    mountains: {
+                        color: '#5a3a20',    // Dark desert
+                        heightRange: [0.8, 0.95]
+                    },
+                    snowPeaks: {
+                        color: '#c8b4a0',    // Light sand
+                        heightRange: [0.95, 1.0]
+                    }
+                }
             },
-            mountains: {
-                color: '#8c6d4d',    // Brown
-                heightRange: [0.8, 0.95] // Reduced from [0.75, 0.9]
+            'volcanis': {
+                name: 'Volcanis',
+                landTypes: {
+                    deepOcean: {
+                        color: '#1a0000',    // Black
+                        heightRange: [0, 0.4]
+                    },
+                    shallowOcean: {
+                        color: '#3a0000',    // Dark red
+                        heightRange: [0.4, 0.5]
+                    },
+                    beach: {
+                        color: '#640000',    // Red
+                        heightRange: [0.5, 0.55]
+                    },
+                    plains: {
+                        color: '#963200',    // Orange
+                        heightRange: [0.55, 0.65]
+                    },
+                    hills: {
+                        color: '#c86400',    // Bright orange
+                        heightRange: [0.65, 0.8]
+                    },
+                    mountains: {
+                        color: '#ff9600',    // Yellow-orange
+                        heightRange: [0.8, 0.95]
+                    },
+                    snowPeaks: {
+                        color: '#ffc800',    // Yellow
+                        heightRange: [0.95, 1.0]
+                    }
+                }
             },
-            snowPeaks: {
-                color: '#f5f5f5',    // White
-                heightRange: [0.95, 1.0] // Reduced from [0.9, 1.0]
+            'aquaria': {
+                name: 'Aquaria',
+                landTypes: {
+                    deepOcean: {
+                        color: '#001a3a',    // Deep blue
+                        heightRange: [0, 0.4]
+                    },
+                    shallowOcean: {
+                        color: '#003a7a',    // Light blue
+                        heightRange: [0.4, 0.5]
+                    },
+                    beach: {
+                        color: '#00a0ff',    // Very light blue
+                        heightRange: [0.5, 0.55]
+                    },
+                    plains: {
+                        color: '#0064c8',    // Blue-green
+                        heightRange: [0.55, 0.65]
+                    },
+                    hills: {
+                        color: '#004896',    // Dark blue-green
+                        heightRange: [0.65, 0.8]
+                    },
+                    mountains: {
+                        color: '#003264',    // Darker blue-green
+                        heightRange: [0.8, 0.95]
+                    },
+                    snowPeaks: {
+                        color: '#c8e0ff',    // Ice blue
+                        heightRange: [0.95, 1.0]
+                    }
+                }
+            },
+            'tundra': {
+                name: 'Tundra',
+                landTypes: {
+                    deepOcean: {
+                        color: '#1a3a5a',    // Deep blue
+                        heightRange: [0, 0.4]
+                    },
+                    shallowOcean: {
+                        color: '#3a5a7a',    // Light blue
+                        heightRange: [0.4, 0.5]
+                    },
+                    beach: {
+                        color: '#c8d0e0',    // Light ice
+                        heightRange: [0.5, 0.55]
+                    },
+                    plains: {
+                        color: '#a0b0c0',    // Gray-blue
+                        heightRange: [0.55, 0.65]
+                    },
+                    hills: {
+                        color: '#8090a0',    // Dark gray
+                        heightRange: [0.65, 0.8]
+                    },
+                    mountains: {
+                        color: '#607080',    // Darker gray
+                        heightRange: [0.8, 0.95]
+                    },
+                    snowPeaks: {
+                        color: '#e0e0ff',    // White-blue
+                        heightRange: [0.95, 1.0]
+                    }
+                }
             }
         };
+
+        // Set default planet type
+        this.currentPlanetType = 'terra-nova';
+        this.landTypes = this.planetTypes[this.currentPlanetType].landTypes;
+
+        // Add planet type change listener
+        document.querySelectorAll('input[name="planetType"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                this.currentPlanetType = e.target.value;
+                this.landTypes = this.planetTypes[this.currentPlanetType].landTypes;
+                this.generate(
+                    parseFloat(document.getElementById('noiseScale').value),
+                    parseFloat(document.getElementById('variation').value)
+                );
+            });
+        });
     }
 
     initializeNoise() {
