@@ -77,11 +77,18 @@
         .planet-type input[type="radio"] {
             margin: 0;
         }
+        .planet-description {
+            color: #fff;
+            margin: 10px 0;
+            font-style: italic;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
     <h1>2D Pixel Planet Generator</h1>
     <canvas id="planetCanvas" width="512" height="512"></canvas>
+    <div id="planetDescription" class="planet-description"></div>
     <div class="controls">
         <div class="planet-types">
             <label class="planet-type">

@@ -21,17 +21,24 @@ class PixelPlanet {
 
         this.seed = this.generateSeed();
         this.initializeNoise();
+        this.updateDescription();
 
         // Add planet type change listener
         document.querySelectorAll('input[name="planetType"]').forEach(radio => {
             radio.addEventListener('change', (e) => {
                 this.currentPlanetType = e.target.value;
+                this.updateDescription();
                 this.generate(
                     parseFloat(document.getElementById('noiseScale').value),
                     parseFloat(document.getElementById('variation').value)
                 );
             });
         });
+    }
+
+    updateDescription() {
+        const description = this.planetTypes[this.currentPlanetType].description;        
+        document.getElementById('planetDescription').textContent = description;
     }
 
     generateSeed() {
@@ -179,9 +186,10 @@ variationInput.addEventListener('input', (e) => {
     );
 });
 
-// Add randomize button listener
+
 randomizeButton.addEventListener('click', () => {
     planet.seed = planet.generateSeed();
+    seedInput.value = planet.seed;
     planet.initializeNoise();
     planet.generate(
         parseFloat(noiseScaleInput.value),
@@ -189,7 +197,7 @@ randomizeButton.addEventListener('click', () => {
     );
 });
 
-// Add load seed button listener
+
 setSeedButton.addEventListener('click', () => {
     const newSeed = seedInput.value;
 
