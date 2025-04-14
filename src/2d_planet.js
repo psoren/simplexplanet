@@ -1,5 +1,5 @@
 import { createNoise2D } from 'https://cdn.jsdelivr.net/npm/simplex-noise@4.0.1/+esm';
-import { terrainTypes } from '/src/terrainTypes.js';
+import { terrainTypes } from './terrainTypes.js';
 
 class PixelPlanet {
     constructor(canvas, size = 256) {
