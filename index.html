@@ -19,7 +19,6 @@
         }
         canvas {
             image-rendering: pixelated;
-            border: 2px solid #333;
             margin: 20px;
         }
         .controls {
@@ -30,11 +29,14 @@
             padding: 20px;
             background-color: #222;
             border-radius: 8px;
+            max-width: 600px;
+            width: 100%;
         }
         .control-group {
             display: flex;
             align-items: center;
             gap: 10px;
+            margin-bottom: 10px;
         }
         label {
             min-width: 120px;
@@ -53,12 +55,67 @@
         button:hover {
             background-color: #555;
         }
+        .planet-types {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .planet-type {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .planet-type:hover {
+            background-color: #333;
+        }
+        .planet-type input[type="radio"] {
+            margin: 0;
+        }
     </style>
 </head>
 <body>
     <h1>2D Pixel Planet Generator</h1>
     <canvas id="planetCanvas" width="512" height="512"></canvas>
     <div class="controls">
+        <div class="planet-types">
+            <label class="planet-type">
+                <input type="radio" name="planetType" value="terra-nova" checked>
+                Terra Nova
+            </label>
+            <label class="planet-type">
+                <input type="radio" name="planetType" value="glacius">
+                Glacius
+            </label>
+            <label class="planet-type">
+                <input type="radio" name="planetType" value="jungle-prime">
+                Jungle Prime
+            </label>
+            <label class="planet-type">
+                <input type="radio" name="planetType" value="cliffside">
+                Cliffside
+            </label>
+            <label class="planet-type">
+                <input type="radio" name="planetType" value="desertia">
+                Desertia
+            </label>
+            <label class="planet-type">
+                <input type="radio" name="planetType" value="volcanis">
+                Volcanis
+            </label>
+            <label class="planet-type">
+                <input type="radio" name="planetType" value="aquaria">
+                Aquaria
+            </label>
+            <label class="planet-type">
+                <input type="radio" name="planetType" value="tundra">
+                Tundra
+            </label>
+        </div>
         <div class="control-group">
             <label for="noiseScale">Noise Scale:</label>
             <input type="range" id="noiseScale" min="3.0" max="10.0" step="0.2" value="3.0">
