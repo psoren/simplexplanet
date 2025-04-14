@@ -1,21 +1,26 @@
 import { createNoise2D } from 'simplex-noise';
 import seedrandom from 'seedrandom';
+import { v4 as uuidv4 } from 'uuid';
 import { terrainTypes } from '/src/terrainTypes.js';
 import { planetTypes } from '/src/planetTypes.js';
 
 class PixelPlanet {
-    constructor(canvas, size = 256) {
+    constructor(canvas, size = 512) {
         this.canvas = canvas;
         this.ctx = canvas.getContext('2d');
         this.size = size;
         this.canvas.width = size;
         this.canvas.height = size;
-        this.initializeNoise();
         
         // Set default planet type
         this.currentPlanetType = 'terra-nova';
         this.landTypes = terrainTypes;
         this.planetTypes = planetTypes;
+
+        // Generate initial random seed and initialize noise
+
+        this.seed = this.generateSeed();
+        this.initializeNoise();
 
         // Add planet type change listener
         document.querySelectorAll('input[name="planetType"]').forEach(radio => {
@@ -29,8 +34,12 @@ class PixelPlanet {
         });
     }
 
+    generateSeed() {
+        return uuidv4();
+    }
+
     initializeNoise() {
-        const rng = seedrandom('my-seed');
+        const rng = seedrandom(this.seed);
         this.noise2D = createNoise2D(rng);
     }
 
@@ -150,26 +159,49 @@ const noiseScaleValue = document.getElementById('noiseScaleValue');
 const variationInput = document.getElementById('variation');
 const variationValue = document.getElementById('variationValue');
 const randomizeButton = document.getElementById('randomize');
+const seedInput = document.getElementById('seed');
+const setSeedButton = document.getElementById('setSeed');
 
 // Update value displays
 noiseScaleInput.addEventListener('input', (e) => {
     noiseScaleValue.textContent = e.target.value;
-    planet.generate(parseFloat(e.target.value), parseFloat(variationInput.value));
+    planet.generate(
+        parseFloat(e.target.value),
+        parseFloat(variationInput.value)
+    );
 });
 
 variationInput.addEventListener('input', (e) => {
     variationValue.textContent = e.target.value;
-    planet.generate(parseFloat(noiseScaleInput.value), parseFloat(e.target.value));
+    planet.generate(
+        parseFloat(noiseScaleInput.value),
+        parseFloat(e.target.value)
+    );
 });
 
-// Generate initial planet
-planet.generate();
-
-// Event listeners
+// Add randomize button listener
 randomizeButton.addEventListener('click', () => {
-    planet.initializeNoise(); // Reinitialize noise for new planet
+    planet.seed = planet.generateSeed();
+    planet.initializeNoise();
     planet.generate(
         parseFloat(noiseScaleInput.value),
         parseFloat(variationInput.value)
     );
-}); 
+});
+
+// Add load seed button listener
+setSeedButton.addEventListener('click', () => {
+    const newSeed = seedInput.value;
+
+    if(newSeed && newSeed !== planet.seed){
+        planet.seed = newSeed;
+        planet.initializeNoise();
+        planet.generate(
+            parseFloat(noiseScaleInput.value),
+            parseFloat(variationInput.value)
+        );
+    }
+});
+
+// Generate initial planet
+planet.generate(3.0, 0.5); 
