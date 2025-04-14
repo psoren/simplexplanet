@@ -5,128 +5,51 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>2D Pixel Planet Generator</title>
+    <link rel="stylesheet" href="src/styles.css">
     <style>
         body {
             margin: 0;
-            padding: 0;
-            background-color: #000;
-            color: white;
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            position: relative;
-            overflow-x: hidden;
+            overflow: hidden;
+            background: black;
         }
 
         #starCanvas {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100vh;
             z-index: 0;
+            pointer-events: none;
+        }
+
+        #threeContainer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
         }
 
         .content {
             position: relative;
-            z-index: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-        }
-
-        h1 {
-            margin-top: 20px;
+            z-index: 2;
             text-align: center;
-        }
-
-        canvas {
-            margin: 20px 0;
+            color: white;
+            padding: 1rem;
         }
 
         #planetCanvas {
-            background: transparent;
-        }
-
-        .planet-description {
-            color: white;
-            margin: 10px 0;
-            font-style: italic;
-            text-align: center;
-        }
-
-        .controls {
-            background-color: rgba(0, 0, 0, 0.7);
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-            width: 100%;
-            max-width: 600px;
-        }
-
-        .control-group {
-            margin-bottom: 15px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        input[type="range"] {
-            width: 100%;
-        }
-
-        .value-display {
-            display: inline-block;
-            min-width: 40px;
-            text-align: right;
-        }
-
-        .planet-types {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .planet-type {
-            background-color: rgba(255, 255, 255, 0.1);
-            padding: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .planet-type:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .planet-type input {
-            margin-right: 8px;
-        }
-
-        .seed-controls {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .seed-controls input {
-            flex: 1;
-            padding: 5px;
-        }
-
-        .seed-controls button {
-            padding: 5px 10px;
-            cursor: pointer;
+            display: none; /* Hide 2D canvas, used only as texture */
         }
     </style>
 </head>
 <body>
     <canvas id="starCanvas"></canvas>
+
+    <div id="threeContainer"></div>
+
     <div class="content">
         <h1>2D Pixel Planet Generator</h1>
         <canvas id="planetCanvas" width="512" height="512"></canvas>
@@ -138,32 +61,25 @@
                     Terra Nova
                 </label>
                 <label class="planet-type">
-                    <input type="radio" name="planetType" value="glacius">
-                    Glacius
+                    <input type="radio" name="planetType" value="glacius"> Glacius
                 </label>
                 <label class="planet-type">
-                    <input type="radio" name="planetType" value="jungle-prime">
-                    Jungle Prime
+                    <input type="radio" name="planetType" value="jungle-prime"> Jungle Prime
                 </label>
                 <label class="planet-type">
-                    <input type="radio" name="planetType" value="cliffside">
-                    Cliffside
+                    <input type="radio" name="planetType" value="cliffside"> Cliffside
                 </label>
                 <label class="planet-type">
-                    <input type="radio" name="planetType" value="desertia">
-                    Desertia
+                    <input type="radio" name="planetType" value="desertia"> Desertia
                 </label>
                 <label class="planet-type">
-                    <input type="radio" name="planetType" value="volcanis">
-                    Volcanis
+                    <input type="radio" name="planetType" value="volcanis"> Volcanis
                 </label>
                 <label class="planet-type">
-                    <input type="radio" name="planetType" value="aquaria">
-                    Aquaria
+                    <input type="radio" name="planetType" value="aquaria"> Aquaria
                 </label>
                 <label class="planet-type">
-                    <input type="radio" name="planetType" value="tundra">
-                    Tundra
+                    <input type="radio" name="planetType" value="tundra"> Tundra
                 </label>
             </div>
             <div class="control-group">
@@ -178,12 +94,13 @@
             </div>
             <div class="control-group">
                 <label for="variation">Landmass Variation:</label>
-                <input type="range" id="variation" min="0.1" max="5.0" step="0.1" value="0.5">
+                <input type="range" id="variation" min="0.1" max="3.0" step="0.1" value="0.5">
                 <span id="variationValue">0.5</span>
             </div>
             <button id="randomize">Randomize Planet</button>
         </div>
     </div>
+
     <script type="module" src="src/2d_planet.js"></script>
 </body>
-</html> 
+</html>

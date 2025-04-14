@@ -3,6 +3,7 @@ import seedrandom from 'seedrandom';
 import { v4 as uuidv4 } from 'uuid';
 import { terrainTypes } from '/src/terrainTypes.js';
 import { planetTypes } from '/src/planetTypes.js';
+import * as THREE from 'three';
 
 class PixelPlanet {
     constructor(canvas, size = 512) {
@@ -121,8 +122,9 @@ class PixelPlanet {
         const center = this.size / 2;
         const radius = this.size / 2 - 2;
         
-        // Clear canvas with transparent background
-        this.ctx.clearRect(0, 0, this.size, this.size);
+        // Clear canvas with black background
+        this.ctx.fillStyle = '#000000';
+        this.ctx.fillRect(0, 0, this.size, this.size);
 
         // Generate planet
         for (let y = 0; y < this.size; y++) {
@@ -184,6 +186,13 @@ class PixelPlanet {
         gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
         this.ctx.fillStyle = gradient;
         this.ctx.fillRect(0, 0, this.size, this.size);
+        this.texture.needsUpdate = true;
+
+        if (this.texture) {
+            this.texture.needsUpdate = true;
+        }    
+    
+    
     }
 }
 
@@ -239,6 +248,33 @@ setSeedButton.addEventListener('click', () => {
         );
     }
 });
+
+// Setup Three.js
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+camera.position.z = 2;
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.getElementById('threeContainer').appendChild(renderer.domElement);
+
+// Turn canvas into texture
+const texture = new THREE.CanvasTexture(canvas);
+planet.texture = texture;
+
+
+const geometry = new THREE.SphereGeometry(1, 64, 64);
+const material = new THREE.MeshBasicMaterial({ map: texture });
+const sphere = new THREE.Mesh(geometry, material);
+scene.add(sphere);
+
+// Animate
+function animate() {
+    requestAnimationFrame(animate);
+    sphere.rotation.y += 0.001;
+    renderer.render(scene, camera);
+}
+animate();
 
 // Generate initial planet
 planet.generate(3.0, 0.5); 
