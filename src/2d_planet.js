@@ -12,13 +12,18 @@ class PixelPlanet {
         this.canvas.width = size;
         this.canvas.height = size;
         
+        // Set up star canvas
+        this.starCanvas = document.getElementById('starCanvas');
+        this.starCtx = this.starCanvas.getContext('2d');
+        this.resizeStarCanvas();
+        window.addEventListener('resize', () => this.resizeStarCanvas());
+        
         // Set default planet type
         this.currentPlanetType = 'terra-nova';
         this.landTypes = terrainTypes;
         this.planetTypes = planetTypes;
 
         // Generate initial random seed and initialize noise
-
         this.seed = this.generateSeed();
         this.initializeNoise();
         this.updateDescription();
@@ -34,6 +39,31 @@ class PixelPlanet {
                 );
             });
         });
+
+        // Generate initial stars
+        this.generateStars();
+    }
+
+    resizeStarCanvas() {
+        this.starCanvas.width = window.innerWidth;
+        this.starCanvas.height = window.innerHeight;
+        this.generateStars();
+    }
+
+    generateStars() {
+        const starCount = Math.floor((this.starCanvas.width * this.starCanvas.height) / 1000);
+        this.starCtx.fillStyle = '#000000';
+        this.starCtx.fillRect(0, 0, this.starCanvas.width, this.starCanvas.height);
+        
+        for (let i = 0; i < starCount; i++) {
+            const x = Math.random() * this.starCanvas.width;
+            const y = Math.random() * this.starCanvas.height;
+            const size = Math.random() * 1.5;
+            const brightness = Math.random() * 0.8 + 0.2;
+            
+            this.starCtx.fillStyle = `rgba(255, 255, 255, ${brightness})`;
+            this.starCtx.fillRect(x, y, size, size);
+        }
     }
 
     updateDescription() {
@@ -91,9 +121,8 @@ class PixelPlanet {
         const center = this.size / 2;
         const radius = this.size / 2 - 2;
         
-        // Clear canvas
-        this.ctx.fillStyle = '#000000';
-        this.ctx.fillRect(0, 0, this.size, this.size);
+        // Clear canvas with transparent background
+        this.ctx.clearRect(0, 0, this.size, this.size);
 
         // Generate planet
         for (let y = 0; y < this.size; y++) {
