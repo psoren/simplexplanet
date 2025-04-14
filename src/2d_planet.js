@@ -1,5 +1,7 @@
-import { createNoise2D } from 'https://cdn.jsdelivr.net/npm/simplex-noise@4.0.1/+esm';
-import { terrainTypes } from './terrainTypes.js';
+import { createNoise2D } from 'simplex-noise';
+import seedrandom from 'seedrandom';
+import { terrainTypes } from '/src/terrainTypes.js';
+import { planetTypes } from '/src/planetTypes.js';
 
 class PixelPlanet {
     constructor(canvas, size = 256) {
@@ -10,53 +12,10 @@ class PixelPlanet {
         this.canvas.height = size;
         this.initializeNoise();
         
-        // Define planet types with their terrain sets
-        this.planetTypes = {
-            'terra-nova': {
-                name: 'Terra Nova',
-                description: 'Earth-like planet with diverse biomes',
-                terrainSet: ['deepOcean', 'shallowOcean', 'beach', 'plains', 'hills', 'mountains', 'snowPeaks']
-            },
-            'glacius': {
-                name: 'Glacius',
-                description: 'Ice planet with frozen oceans',
-                terrainSet: ['deepIce', 'shallowIce', 'iceBeach', 'tundra', 'iceHills', 'iceMountains', 'icePeaks']
-            },
-            'jungle-prime': {
-                name: 'Jungle Prime',
-                description: 'Tropical planet with dense vegetation',
-                terrainSet: ['deepJungleOcean', 'shallowJungleOcean', 'jungleBeach', 'jungle', 'jungleHills', 'jungleMountains', 'junglePeaks']
-            },
-            'cliffside': {
-                name: 'Cliffside',
-                description: 'Rocky planet with dramatic elevation changes',
-                terrainSet: ['deepCliffOcean', 'shallowCliffOcean', 'cliffBeach', 'cliffPlains', 'cliffHills', 'cliffMountains', 'cliffPeaks']
-            },
-            'desertia': {
-                name: 'Desertia',
-                description: 'Arid planet with vast deserts',
-                terrainSet: ['deepDesertOcean', 'shallowDesertOcean', 'desertBeach', 'desert', 'desertHills', 'desertMountains', 'desertPeaks']
-            },
-            'volcanis': {
-                name: 'Volcanis',
-                description: 'Volcanic planet with lava flows',
-                terrainSet: ['lavaOcean', 'shallowLava', 'lavaBeach', 'volcanicPlains', 'volcanicHills', 'volcanicMountains', 'volcanicPeaks']
-            },
-            'aquaria': {
-                name: 'Aquaria',
-                description: 'Ocean planet with scattered islands',
-                terrainSet: ['deepAquaOcean', 'shallowAquaOcean', 'aquaBeach', 'aquaPlains', 'aquaHills', 'aquaMountains', 'aquaPeaks']
-            },
-            'tundra': {
-                name: 'Tundra',
-                description: 'Cold planet with sparse vegetation',
-                terrainSet: ['deepIce', 'shallowIce', 'iceBeach', 'tundra', 'iceHills', 'iceMountains', 'icePeaks']
-            }
-        };
-
         // Set default planet type
         this.currentPlanetType = 'terra-nova';
         this.landTypes = terrainTypes;
+        this.planetTypes = planetTypes;
 
         // Add planet type change listener
         document.querySelectorAll('input[name="planetType"]').forEach(radio => {
@@ -71,7 +30,8 @@ class PixelPlanet {
     }
 
     initializeNoise() {
-        this.noise2D = createNoise2D();
+        const rng = seedrandom('my-seed');
+        this.noise2D = createNoise2D(rng);
     }
 
     // Smoothstep function for edge fading
