@@ -17,6 +17,7 @@
   "devDependencies": {
     "gh-pages": "^6.3.0",
     "playwright": "^1.51.1",
+    "puppeteer": "^24.6.1",
     "vite": "^5.1.0"
   },
   "homepage": "https://github.com/psoren/simplexplanet"
